@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -66,3 +67,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+=======
+# Search-Algorithm-Visualizer
+This repo contains BFS,DFS, Best First, Dijkstra, A* etc. search algorithm visualization in React
+>>>>>>> bc25788fa757cc4f5da159f7fe67078c5b926133
