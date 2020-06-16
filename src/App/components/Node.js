@@ -1,30 +1,31 @@
 import React from "react";
 import styled from "styled-components";
 
+// #05f0dc  #0aa6f5
+
 const NodeStyled = styled.div.attrs((props) => {
   let nodeColor;
   if (props.isWall) {
     nodeColor = "#182836";
   } else if (props.isCurrent) {
-    nodeColor = "#eea1ff";
+    nodeColor = "#87ffbc";
   } else if (props.isStart) {
-    nodeColor = "#9233ff";
+    nodeColor = "#8e27e8";
   } else if (props.isPath) {
-    nodeColor = "#9299ff";
+    nodeColor = "#45e68c";
   } else if (props.isEnd) {
-    nodeColor = "#d6fc97";
+    nodeColor = "#ff85b4";
   } else if (props.isVisited) {
-    nodeColor = "#dabdff";
+    nodeColor = "#d6ffe8";
   } else {
     nodeColor = "#ffffff";
   }
   return {
     style: {
-      border: `1px solid ${props.isWall ? "#182836" : "#eeeeee"}`,
       gridColumn: props.pos.j + 1,
       gridRow: props.pos.i + 1,
       background: nodeColor,
-      transition: props.isCurrent ? `` : `background 1s, border 1s`,
+      transition: props.isCurrent ? `` : `background 500ms`,
     },
   };
 })``;

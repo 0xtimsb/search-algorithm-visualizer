@@ -22,7 +22,7 @@ const BoardStyled = styled.div`
 `;
 
 class App extends React.Component {
-  n = 21; // Must be an odd number.
+  n = 27; // Must be an odd number.
   animateList = [];
 
   constructor(props) {
@@ -54,17 +54,17 @@ class App extends React.Component {
     for (let j = 0; j < this.n; j++) {
       for (let i = 0; i < this.n; i++) {
         let currentNode = matrix[j][i];
-        if (j + 1 < this.n) {
-          currentNode.adjacentPos.push({ j: j + 1, i });
-        }
         if (j - 1 >= 0) {
           currentNode.adjacentPos.push({ j: j - 1, i });
+        }
+        if (i - 1 >= 0) {
+          currentNode.adjacentPos.push({ j, i: i - 1 });
         }
         if (i + 1 < this.n) {
           currentNode.adjacentPos.push({ j, i: i + 1 });
         }
-        if (i - 1 >= 0) {
-          currentNode.adjacentPos.push({ j, i: i - 1 });
+        if (j + 1 < this.n) {
+          currentNode.adjacentPos.push({ j: j + 1, i });
         }
       }
     }
@@ -76,7 +76,8 @@ class App extends React.Component {
         newMatrix[item.pos.j][item.pos.i] = item;
       }
       newMatrix[1][1].isStart = true;
-      newMatrix[this.n - 2][this.n - 2].isEnd = true;
+      const { j, i } = this.giveRandomBlankPos(newMatrix);
+      newMatrix[j][i].isEnd = true;
       this.setState({ matrix: newMatrix }, () => {
         this.animateList.push(
           ...giveDFS(this.n, this.state.matrix, { j: 1, i: 1 })
@@ -85,6 +86,15 @@ class App extends React.Component {
       });
     });
   }
+
+  giveRandomBlankPos = (matrix) => {
+    let j = Math.floor(Math.random() * (this.n - 2)) + 1;
+    let i = Math.floor(Math.random() * (this.n - 2)) + 1;
+    if (matrix[j][i].isWall) {
+      return this.giveRandomBlankPos(matrix);
+    }
+    return { j, i };
+  };
 
   animateMatrix = (matrix) => {
     if (this.animateList.length !== 0) {
