@@ -4,7 +4,8 @@ import { v4 as uuid } from "uuid";
 import Node from "./components/Node";
 
 import giveMaze from "./algorithms/maze";
-import giveDFS from "./algorithms/dfs";
+//import giveDFS from "./algorithms/dfs";
+import giveBFS from "./algorithms/bfs";
 
 const AppStyled = styled.div`
   display: flex;
@@ -22,7 +23,7 @@ const BoardStyled = styled.div`
 `;
 
 class App extends React.Component {
-  n = 27; // Must be an odd number.
+  n = 17; // Must be an odd number.
   animateList = [];
 
   constructor(props) {
@@ -80,7 +81,7 @@ class App extends React.Component {
       newMatrix[j][i].isEnd = true;
       this.setState({ matrix: newMatrix }, () => {
         this.animateList.push(
-          ...giveDFS(this.n, this.state.matrix, { j: 1, i: 1 })
+          ...giveBFS(this.n, this.state.matrix, { j: 1, i: 1 })
         );
         this.animateMatrix(newMatrix);
       });
