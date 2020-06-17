@@ -4,8 +4,9 @@ import { v4 as uuid } from "uuid";
 import Node from "./components/Node";
 
 import giveMaze from "./algorithms/maze";
-//import giveDFS from "./algorithms/dfs";
-import giveBFS from "./algorithms/bfs";
+//import giveDFS from "./algorithms/depth-first-search";
+//import giveBFS from "./algorithms/best-first-search";
+import giveBDS from "./algorithms/bidirectional-search";
 
 const AppStyled = styled.div`
   display: flex;
@@ -81,7 +82,7 @@ class App extends React.Component {
       newMatrix[j][i].isEnd = true;
       this.setState({ matrix: newMatrix }, () => {
         this.animateList.push(
-          ...giveBFS(this.n, this.state.matrix, { j: 1, i: 1 })
+          ...giveBDS(this.n, this.state.matrix, { j: 1, i: 1 }, { j, i })
         );
         this.animateMatrix(newMatrix);
       });
