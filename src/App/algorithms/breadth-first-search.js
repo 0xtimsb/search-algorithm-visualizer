@@ -1,10 +1,11 @@
-let startPos;
-let endPos = { j: undefined, i: undefined };
-let animateList = [];
+import cloneDeep from "lodash/cloneDeep";
+
+let startPos, endPos, animateList;
 
 let giveBFS = (mat, start) => {
-  let matrix = JSON.parse(JSON.stringify(mat));
+  let matrix = cloneDeep(mat);
   startPos = start;
+  animateList = [];
   if (searchPath(matrix)) {
     tracePath(matrix);
   }
@@ -25,7 +26,7 @@ let searchPath = (matrix) => {
       queue.push(pos);
     }
   });
-  animateList.push(JSON.parse(JSON.stringify(matrix)));
+  animateList.push(cloneDeep(matrix));
   while (queue.length !== 0) {
     let adjPos = queue.shift();
     currentNode = matrix[adjPos.j][adjPos.i];
@@ -36,9 +37,9 @@ let searchPath = (matrix) => {
     } else if (!currentNode.isVisited) {
       currentNode.isVisited = true;
       currentNode.isCurrent = true;
-      animateList.push(JSON.parse(JSON.stringify(matrix)));
+      animateList.push(cloneDeep(matrix));
       currentNode.isCurrent = false;
-      animateList.push(JSON.parse(JSON.stringify(matrix)));
+      animateList.push(cloneDeep(matrix));
       let currentPos = { ...currentNode.pos };
       currentNode.adjacentPos.forEach((pos) => {
         let adjNode = matrix[pos.j][pos.i];
@@ -63,7 +64,7 @@ let tracePath = (matrix) => {
   while (path.length !== 0) {
     let pathPos = path.pop();
     matrix[pathPos.j][pathPos.i].isPath = true;
-    animateList.push(JSON.parse(JSON.stringify(matrix)));
+    animateList.push(cloneDeep(matrix));
   }
 };
 

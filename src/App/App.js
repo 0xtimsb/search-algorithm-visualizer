@@ -6,8 +6,8 @@ import Node from "./components/Node";
 
 import giveMaze from "./algorithms/maze";
 //import giveDFS from "./algorithms/depth-first-search";
-import giveBFS from "./algorithms/breadth-first-search";
-//import giveGBFS from "./algorithms/greedy-best-first-search";
+//import giveBFS from "./algorithms/breadth-first-search";
+import giveGBFS from "./algorithms/greedy-best-first-search";
 
 const AppStyled = styled.div`
   display: flex;
@@ -92,7 +92,11 @@ class App extends React.Component {
       newMatrix[this.endPos.j][this.endPos.i].isEnd = true;
 
       this.setState({ matrix: newMatrix }, () => {
-        this.animateList = giveBFS(this.state.matrix, this.startPos);
+        this.animateList = giveGBFS(
+          this.state.matrix,
+          this.startPos,
+          this.endPos
+        );
         this.animateMatrix(newMatrix);
       });
     });
@@ -116,7 +120,7 @@ class App extends React.Component {
         window.requestAnimationFrame(() => this.animateMatrix(matrix));
       });
     } else {
-      setTimeout(this.loadMatrix, 700);
+      setTimeout(this.loadMatrix, 500);
     }
   };
 
