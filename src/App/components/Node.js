@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-// #05f0dc  #0aa6f5
-
 const NodeStyled = styled.div.attrs((props) => {
   let nodeColor;
   if (props.isWall) {

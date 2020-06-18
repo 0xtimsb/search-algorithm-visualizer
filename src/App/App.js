@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { v4 as uuid } from "uuid";
+import cloneDeep from "lodash/cloneDeep";
 import Node from "./components/Node";
 
 import giveMaze from "./algorithms/maze";
 //import giveDFS from "./algorithms/depth-first-search";
-//import giveBFS from "./algorithms/best-first-search";
-import giveBDS from "./algorithms/bidirectional-search";
+import giveBFS from "./algorithms/breadth-first-search";
+//import giveGBFS from "./algorithms/greedy-best-first-search";
 
 const AppStyled = styled.div`
   display: flex;
@@ -24,8 +25,10 @@ const BoardStyled = styled.div`
 `;
 
 class App extends React.Component {
-  n = 17; // Must be an odd number.
+  n = 31; // Must be an odd number.
   animateList = [];
+  startPos;
+  endPos;
 
   constructor(props) {
     super(props);
@@ -35,6 +38,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    this.loadMatrix();
+  }
+
+  loadMatrix = () => {
     let matrix = [];
     for (let j = 0; j < this.n; j++) {
       matrix.push([]);
@@ -72,27 +79,32 @@ class App extends React.Component {
     }
     this.setState({ matrix }, () => {
       let mazeRenderList = giveMaze(this.n, this.state.matrix);
-      let newMatrix = JSON.parse(JSON.stringify(this.state.matrix));
+      let newMatrix = cloneDeep(this.state.matrix);
       while (mazeRenderList.length !== 0) {
         let item = mazeRenderList.shift();
         newMatrix[item.pos.j][item.pos.i] = item;
       }
-      newMatrix[1][1].isStart = true;
-      const { j, i } = this.giveRandomBlankPos(newMatrix);
-      newMatrix[j][i].isEnd = true;
+
+      this.startPos = { j: 1, i: 1 };
+      this.endPos = this.giveRandomBlankPos(newMatrix);
+
+      newMatrix[this.startPos.j][this.startPos.i].isStart = true;
+      newMatrix[this.endPos.j][this.endPos.i].isEnd = true;
+
       this.setState({ matrix: newMatrix }, () => {
-        this.animateList.push(
-          ...giveBDS(this.n, this.state.matrix, { j: 1, i: 1 }, { j, i })
-        );
+        this.animateList = giveBFS(this.state.matrix, this.startPos);
         this.animateMatrix(newMatrix);
       });
     });
-  }
+  };
 
   giveRandomBlankPos = (matrix) => {
     let j = Math.floor(Math.random() * (this.n - 2)) + 1;
     let i = Math.floor(Math.random() * (this.n - 2)) + 1;
-    if (matrix[j][i].isWall) {
+    if (
+      matrix[j][i].isWall ||
+      (this.startPos.j === j && this.startPos.i === i)
+    ) {
       return this.giveRandomBlankPos(matrix);
     }
     return { j, i };
@@ -103,6 +115,8 @@ class App extends React.Component {
       this.setState({ matrix: this.animateList.shift() }, () => {
         window.requestAnimationFrame(() => this.animateMatrix(matrix));
       });
+    } else {
+      setTimeout(this.loadMatrix, 700);
     }
   };
 

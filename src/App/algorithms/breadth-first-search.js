@@ -2,7 +2,7 @@ let startPos;
 let endPos = { j: undefined, i: undefined };
 let animateList = [];
 
-let giveBFS = (num, mat, start) => {
+let giveBFS = (mat, start) => {
   let matrix = JSON.parse(JSON.stringify(mat));
   startPos = start;
   if (searchPath(matrix)) {
@@ -28,19 +28,12 @@ let searchPath = (matrix) => {
   animateList.push(JSON.parse(JSON.stringify(matrix)));
   while (queue.length !== 0) {
     let adjPos = queue.shift();
-    if (queue.length !== 0) {
-      while (adjPos.j === queue[0].j && adjPos.i === queue[0].i) {
-        if (queue.length !== 0) {
-          queue.shift();
-        }
-      }
-    }
     currentNode = matrix[adjPos.j][adjPos.i];
     if (currentNode.isEnd) {
       endPos = { ...currentNode.pos };
       console.log("Got it.");
       return true;
-    } else {
+    } else if (!currentNode.isVisited) {
       currentNode.isVisited = true;
       currentNode.isCurrent = true;
       animateList.push(JSON.parse(JSON.stringify(matrix)));
